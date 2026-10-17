@@ -41,7 +41,7 @@ VPNGATE_MIRROR = os.environ.get(
     "VPNGATE_MIRROR",
     "https://raw.githubusercontent.com/fdciabdul/Vpngate-Scraper-API/main/json/data.json",
 )
-WORKER_CHECK_URL = os.environ.get("CHECK_WORKER", "https://checksocks5.check-sstp.eu.cc/check?sstp=")
+WORKER_CHECK_URL = os.environ.get("CHECK_WORKER", "https://check-sstp.wanglaoban.workers.dev/check?sstp=vpn:vpn@")
 CONCURRENCY = max(1, int(os.environ.get("CHECK_CONCURRENCY", "32")))
 CHECK_TIMEOUT = float(os.environ.get("CHECK_TIMEOUT", "90"))
 MAX_CHECK_NODES = int(os.environ.get("MAX_CHECK_NODES", "0"))
@@ -322,8 +322,7 @@ def classify_network(host, exit_org, is_datacenter=None):
     return "unknown"
 
 def check_one(node, session):
-    url = WORKER_CHECK_URL + f"vpn:vpn@{node['host']}:{node['port']}"
-    print(f"正在检测: {url}")  
+    url = WORKER_CHECK_URL + quote(f"{node['host']}:{node['port']}", safe="")
     out = dict(node)
     out["protocol"] = "sstp"
     out["link"] = f"sstp://vpn:vpn@{node['host']}:{node['port']}"
