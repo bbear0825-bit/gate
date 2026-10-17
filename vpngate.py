@@ -322,7 +322,8 @@ def classify_network(host, exit_org, is_datacenter=None):
     return "unknown"
 
 def check_one(node, session):
-    url = WORKER_CHECK_URL + quote(f"{node['host']}:{node['port']}", safe="")
+    url = WORKER_CHECK_URL + f"vpn:vpn@{node['host']}:{node['port']}"
+    print(f"正在检测: {url}")  
     out = dict(node)
     out["protocol"] = "sstp"
     out["link"] = f"sstp://vpn:vpn@{node['host']}:{node['port']}"
